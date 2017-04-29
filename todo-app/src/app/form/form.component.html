@@ -1,7 +1,19 @@
 <div>
   <label>name: </label>
-  <input [(ngModel)]="task.name" placeholder="name" (ngModelChange)="setUpdatedAt($event)">
+  <input type="text" [(ngModel)]="task.name" (ngModelChange)="setUpdatedAt($event)" #name="ngModel" required maxlength="10">
 </div>
+<div *ngIf="name.errors && (name.dirty || name.touched)">
+  <div [hidden]="!name.errors.required">
+    Name is required
+  </div>
+  <div [hidden]="!name.errors.minlength">
+    Name must be at least 4 characters long.
+  </div>
+  <div [hidden]="!name.errors.maxlength">
+    Name cannot be more than 10 characters long.
+  </div>
+</div>
+
 <br>
 <h3>タスク</h3>
 <div>タスク名：{{task.name}}</div>
