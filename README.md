@@ -134,9 +134,9 @@ http://localhost:4200/pipe にアクセス。
 
 | template | result | memo |
 | :--- | :--- | :--- |
-| `{{1000 | number}}` | `1,000` | `,` を入れて見やすくしてくれる。 |
-| `{{1 | number: '3.0-0'}}` | `001` | `{minIntegerDigits}.{minFractionDigits}-{maxFractionDigits}` |
-| `{{12.34 | number: '1.1-1'}}` | `12.3` | `{minIntegerDigits}.{minFractionDigits}-{maxFractionDigits}` |
+| <code>{{1000 &#124; number}}</code> | `1,000` | `,` を入れて見やすくしてくれる。 |
+| <code>{{1 &#124; number: '3.0-0'}}</code> | `001` | `{minIntegerDigits}.{minFractionDigits}-{maxFractionDigits}` |
+| <code>{{12.34 &#124; number: '1.1-1'}}</code> | `12.3` | `{minIntegerDigits}.{minFractionDigits}-{maxFractionDigits}` |
 
 https://angular.io/docs/ts/latest/api/common/index/DecimalPipe-pipe.html
 
