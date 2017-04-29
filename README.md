@@ -108,7 +108,27 @@ template の `{{title}}` をいくつか書き替えてみよう。
 
 ### Pipe (旧称Filter) で感動してみる
 センスの良さに、惚れるはず。
-template の `{{title}}` を更に次のように書いてみよう。
+まず、新しくページを追加する。
+
+```bash
+ng g component pipe
+```
+
+リクエストパス `/pipe` と `PipeComponent` を紐付けるために、
+`app-routing.module.ts` にルーティング定義を追加。
+
+```typescript
+const routes: Routes = [
+  {
+    path: 'pipe',
+    component: PipeComponent
+  }
+];
+```
+
+http://localhost:4200/pipe にアクセス。
+
+`src/app/pipe/pipe.component.html` に次の Angular 式を書いてみよう。
 
 #### DecimalPipe
 
@@ -121,22 +141,30 @@ template の `{{title}}` を更に次のように書いてみよう。
 https://angular.io/docs/ts/latest/api/common/index/DecimalPipe-pipe.html
 
 #### DatePipe
-まず、`AppComponent` にプロパティを追加。
+`PipeComponent` にプロパティを追加。
 (template で `{{new Date()}}` という記載がエラーになるため)
 
+`src/app/pipe/pipe.component.ts` にバインディングする変数 `now` を追加
+
 ```typescript
-export class AppComponent {
-  title: string = 'app works!';
-  now  : Date   = new Date();
+export class PipeComponent implements OnInit {
+  now: Date = new Date();  // これを追記
+  constructor() { }
+
+  ngOnInit() {
+  }
+
 }
 ```
+
+`src/app/pipe/pipe.component.html` に次の Angular 式を書いてみよう。
 
 | template | result | memo |
 | :--- | :--- | :--- |
 | `{{now}}` | `Sat Apr 29 2017 20:44:46 GMT+0900 (JST)` | `(new Date()).toString()` |
-| `{{now | date }}` | `Apr 29, 2017` | |
-| `{{now | date: 'y年M月d日 HH:mm'}}` | `2017年4月29日 20:57` | |
-| `{{now | date: 'MM/dd HH:mm'}}` | `04/29 21:00` | |
+| `{{now &#124; date }}` | `Apr 29, 2017` | |
+| `{{now &#124; date: 'y年M月d日 HH:mm'}}` | `2017年4月29日 20:57` | |
+| `{{now &#124; date: 'MM/dd HH:mm'}}` | `04/29 21:00` | |
 
 https://angular.io/docs/ts/latest/api/common/index/DatePipe-pipe.html
 
