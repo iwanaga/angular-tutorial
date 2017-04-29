@@ -97,16 +97,16 @@ export class AppComponent {  // コントローラ。template に提供する値
 2. スクリプトの値をテンプレートにバインディングをするときは、`{{ }}` 内に記述する。これによって、アプリの本質でない処理 (エレメントを取得して子要素を作って、text node に代入) でコードが埋め尽くされることが無い。値変更後の DOM 更新忘れと無縁。
 3. angular-cli の ng serve は Live Reload 機能を備えている。これまで、コード修正の度にトランスパイルしてブラウザリロードを手作業で行っていた人は、感動するべし。
 
-### バインディングを体験
+## バインディングを体験
 template の `{{title}}` をいくつか書き替えてみよう。
 
-| `{{title}}` | 説明 |
+| angular expression | 説明 |
 | :--- | :--- |
 | `{{1 + 1}}` | evaluation 結果は 2 |
 | `{{ {} }}` | 評価結果がプリミティブ型じゃないとき。`{}.toString()` |
 | `{{foo}}` | undefined は空文字列に置換。`(undefined).toString()` エラーを心配しなくていい　|
 
-### Pipe (旧称Filter) で感動してみる
+## Pipe (旧称Filter) で感動してみる
 センスの良さに、惚れるはず。
 まず、新しくページを追加する。
 
@@ -130,9 +130,9 @@ http://localhost:4200/pipe にアクセス。
 
 `src/app/pipe/pipe.component.html` に次の Angular 式を書いてみよう。
 
-#### DecimalPipe
+### DecimalPipe
 
-| template | result | memo |
+| angular expression | result | memo |
 | :--- | :--- | :--- |
 | <code>{{1000 &#124; number}}</code> | `1,000` | `,` を入れて見やすくしてくれる。 |
 | <code>{{1 &#124; number: '3.0-0'}}</code> | `001` | `{minIntegerDigits}.{minFractionDigits}-{maxFractionDigits}` |
@@ -140,7 +140,7 @@ http://localhost:4200/pipe にアクセス。
 
 https://angular.io/docs/ts/latest/api/common/index/DecimalPipe-pipe.html
 
-#### DatePipe
+### DatePipe
 `PipeComponent` にプロパティを追加。
 (template で `{{new Date()}}` という記載がエラーになるため)
 
@@ -159,7 +159,7 @@ export class PipeComponent implements OnInit {
 
 `src/app/pipe/pipe.component.html` に次の Angular 式を書いてみよう。
 
-| template | result | memo |
+| angular expression | result | memo |
 | :--- | :--- | :--- |
 | <code>{{now}}</code> | `Sat Apr 29 2017 20:44:46 GMT+0900 (JST)` | `(new Date()).toString()` |
 | <code>{{now &#124; date }}</code> | `Apr 29, 2017` | |
@@ -168,10 +168,10 @@ export class PipeComponent implements OnInit {
 
 https://angular.io/docs/ts/latest/api/common/index/DatePipe-pipe.html
 
-#### Pipe 一覧
+### Pipe 一覧
 https://angular.io/docs/ts/latest/api/#!?query=pipe
 
-### 双方向バインディング
+## 双方向バインディング
 これまでやってきたのは、Controller から Template への単方向バインディングだった。
 Template で発生したユーザのアクション (inputフォームへの文字入力) を Controller へ伝搬する例を解説する。
 
@@ -181,7 +181,7 @@ Template で発生したユーザのアクション (inputフォームへの文�
 ng g component form-component
 ```
 
-### ワンタイムバインディング
+## ワンタイムバインディング
 バインディングするために、Angular では値の変化をウォッチしている。監視対象が増えるほど、処理が遅くなる。
 値を変更しないものは、ワンタイムバインディングを使うようにし、性能劣化を抑えよう。
 
