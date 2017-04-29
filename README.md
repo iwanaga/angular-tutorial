@@ -1,8 +1,8 @@
 # angular-tutorial
 tutorial for angular with angular-cli
 
-## セットアップ
-### angular-cli
+## 1. セットアップ
+### 1-1. angular-cli
 Node.js v6.10.2 をインストール
 
 ```bash
@@ -28,28 +28,14 @@ ng completion --bash >> ~/.bash_profile
 source ~/.bash_profile
 ```
 
-### 雛形を作成する
+### 1-2. 雛形を作成する
 ベストプラクティスに基づいたディレクトリ構造でファイルを自動生成し、依存モジュールをインストールする。
 
 ```bash
 ng new todo-app --routing
 ```
 
-参考
-
-| 生成対象 | コマンド例 |
-| :--- | :--- |
-| Component | `ng g component my-new-component` |
-| Directive | `ng g directive my-new-directive` |
-| Pipe | `ng g pipe my-new-pipe` |
-| Service | `ng g service my-new-service` |
-| Class | `ng g class my-new-class` |
-| Guard | `ng g guard my-new-guard` |
-| Interface | `ng g interface my-new-interface` |
-| Enum | `ng g enum my-new-enum` |
-| Module | `ng g module my-module` |
-
-### アプリをブラウザで表示
+### 1-3. アプリをブラウザで表示
 
 ```bash
 ng serve -o
@@ -65,7 +51,7 @@ ng serve の機能一覧を見る
 ng serve --help
 ```
 
-## アプリが表示されるまでに何が行われているの？
+## 2. アプリが表示されるまでに何が行われているの？
 1. `/index.html` を開く。ブラウザでアプリの JavaScript を実行し終えたら、`app-root` エレメントを `AppComponent` でトランスクルードする。
     - `AppComponent` の定義は `src/app/app.comonent.ts` に記述。
 
@@ -92,7 +78,7 @@ export class AppComponent {  // コントローラ。template に提供する値
 - この場合、`AppComponent` インスタンスの `title` プロパティの評価結果は `'app works!'`。
 - `{{title}}` は `app works!` に置換される。
 
-## バインディングを体験
+## 3. バインディングを体験
 template の `{{title}}` をいくつか書き替えてみよう。
 
 | angular expression | 説明 |
@@ -101,7 +87,7 @@ template の `{{title}}` をいくつか書き替えてみよう。
 | `{{ {} }}` | 評価結果がプリミティブ型じゃないとき。`{}.toString()` |
 | `{{foo}}` | undefined は空文字列に置換。`(undefined).toString()` エラーを心配しなくていい　|
 
-## ここまでで押さえて欲しいこと
+## 1〜3　までのおさらい
 1. 値と処理を宣言するだけでいい。
     - 実行をフレームワークにお任せできるので、コーディング量が超絶的に少ない。
 2. スクリプトの値をテンプレートにバインディングをするときは、`{{ }}` 内に記述する
@@ -110,7 +96,8 @@ template の `{{title}}` をいくつか書き替えてみよう。
 3. angular-cli の ng serve は Live Reload 機能を備えている。
     - これまで、コード修正の度にトランスパイルしてブラウザリロードを手作業で行っていた人は、感動モノ。
 
-## ページを追加
+## 4. ページを追加
+次の Step で Pipe の説明をするので、PipeComponent というコンポーネントを生成する。
 ```bash
 ng g component pipe
 ```
@@ -129,11 +116,11 @@ const routes: Routes = [
 
 http://localhost:4200/pipe にアクセス。
 
-## Pipe (旧称Filter) で感動してみる
+## 5. Pipe (旧称Filter) で感動してみる
 センスの良さに、惚れるはず。
 `src/app/pipe/pipe.component.html` に次の Angular 式を書いてみよう。
 
-### DecimalPipe
+### 5-1. DecimalPipe
 
 | angular expression | result | memo |
 | :--- | :--- | :--- |
@@ -143,7 +130,7 @@ http://localhost:4200/pipe にアクセス。
 
 https://angular.io/docs/ts/latest/api/common/index/DecimalPipe-pipe.html
 
-### DatePipe
+### 5-2. DatePipe
 `PipeComponent` にプロパティを追加。
 (template で `{{new Date()}}` という記載がエラーになるため)
 
@@ -171,10 +158,10 @@ export class PipeComponent implements OnInit {
 
 https://angular.io/docs/ts/latest/api/common/index/DatePipe-pipe.html
 
-### Pipe 一覧
+### 5-3. Pipe 一覧
 https://angular.io/docs/ts/latest/api/#!?query=pipe
 
-## 双方向バインディング
+## 6. 双方向バインディング
 これまでやってきたのは、Controller から Template への単方向バインディングだった。
 Template で発生したユーザのアクション (inputフォームへの文字入力) を Controller へ伝搬する例を解説する。
 
@@ -197,6 +184,8 @@ const routes: Routes = [
   }
 ];
 ```
+
+ささっと form をマークアップ。
 
 
 ## ワンタイムバインディング
