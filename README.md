@@ -92,7 +92,7 @@ template の `{{title}}` を更に次のように書いてみよう。
 #### DecimalPipe
 
 | template | result | memo |
-| :--- | :--- |
+| :--- | :--- | :--- |
 | `{{1000 | number}}` | `1,000` | `,` を入れて見やすくしてくれる。 |
 | `{{1 | number: '3.0-0'}}` | `001` | `{minIntegerDigits}.{minFractionDigits}-{maxFractionDigits}` |
 | `{{12.34 | number: '1.1-1'}}` | `12.3` | `{minIntegerDigits}.{minFractionDigits}-{maxFractionDigits}` |
