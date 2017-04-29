@@ -92,11 +92,6 @@ export class AppComponent {  // コントローラ。template に提供する値
 - この場合、`AppComponent` インスタンスの `title` プロパティの評価結果は `'app works!'`。
 - `{{title}}` は `app works!` に置換される。
 
-### ここで押さえて欲しいこと
-1. 値と処理を宣言するだけでいい。実行をフレームワークにお任せできるので、コーディング量が超絶的に少ない。
-2. スクリプトの値をテンプレートにバインディングをするときは、`{{ }}` 内に記述する。これによって、アプリの本質でない処理 (エレメントを取得して子要素を作って、text node に代入) でコードが埋め尽くされることが無い。値変更後の DOM 更新忘れと無縁。
-3. angular-cli の ng serve は Live Reload 機能を備えている。これまで、コード修正の度にトランスパイルしてブラウザリロードを手作業で行っていた人は、感動するべし。
-
 ## バインディングを体験
 template の `{{title}}` をいくつか書き替えてみよう。
 
@@ -106,10 +101,16 @@ template の `{{title}}` をいくつか書き替えてみよう。
 | `{{ {} }}` | 評価結果がプリミティブ型じゃないとき。`{}.toString()` |
 | `{{foo}}` | undefined は空文字列に置換。`(undefined).toString()` エラーを心配しなくていい　|
 
-## Pipe (旧称Filter) で感動してみる
-センスの良さに、惚れるはず。
-まず、新しくページを追加する。
+## ここまでで押さえて欲しいこと
+1. 値と処理を宣言するだけでいい。
+    - 実行をフレームワークにお任せできるので、コーディング量が超絶的に少ない。
+2. スクリプトの値をテンプレートにバインディングをするときは、`{{ }}` 内に記述する
+    - これによって、アプリの本質でない処理 (エレメントを取得して子要素を作って、text node に代入) でコードが埋め尽くされることが無い。
+    - 値変更後の DOM 更新忘れと無縁になる。
+3. angular-cli の ng serve は Live Reload 機能を備えている。
+    - これまで、コード修正の度にトランスパイルしてブラウザリロードを手作業で行っていた人は、感動モノ。
 
+## ページを追加
 ```bash
 ng g component pipe
 ```
@@ -128,6 +129,8 @@ const routes: Routes = [
 
 http://localhost:4200/pipe にアクセス。
 
+## Pipe (旧称Filter) で感動してみる
+センスの良さに、惚れるはず。
 `src/app/pipe/pipe.component.html` に次の Angular 式を書いてみよう。
 
 ### DecimalPipe
@@ -178,8 +181,23 @@ Template で発生したユーザのアクション (inputフォームへの文�
 まず、新しくページを追加する。
 
 ```bash
-ng g component form-component
+ng g component form
 ```
+
+パス `/form` と結びつける。
+```typescript
+const routes: Routes = [
+  {
+    path: 'pipe',
+    component: PipeComponent
+  },
+  { // ここから下を追記する
+    path: 'form',
+    component: FormComponent
+  }
+];
+```
+
 
 ## ワンタイムバインディング
 バインディングするために、Angular では値の変化をウォッチしている。監視対象が増えるほど、処理が遅くなる。
