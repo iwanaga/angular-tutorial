@@ -1,0 +1,20 @@
+<div>
+  <label>name: </label>
+  <input type="text" [(ngModel)]="task.name" (ngModelChange)="setUpdatedAt($event)" #name="ngModel" required minlength="3" maxlength="10">
+</div>
+<div *ngIf="name.errors && (name.dirty || name.touched)">
+  <div [hidden]="!name.errors.required">
+    Name is required
+  </div>
+  <div [hidden]="!name.errors.minlength">
+    Name must be at least 2 characters long.
+  </div>
+  <div [hidden]="!name.errors.maxlength">
+    Name cannot be more than 10 characters long.
+  </div>
+</div>
+
+<br>
+<h3>タスク</h3>
+<div>タスク名：{{task.name}}</div>
+<div>最終更新：{{task.updatedAt | date: 'MM/dd hh:mm:ss'}}</div>

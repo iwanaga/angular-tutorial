@@ -1,8 +1,8 @@
 # angular-tutorial
 tutorial for angular with angular-cli
 
-## セットアップ
-### angular-cli
+## 1. セットアップ
+### 1-1. angular-cli
 Node.js v6.10.2 をインストール
 
 ```bash
@@ -21,14 +21,21 @@ angular-cli をインストール
 npm install -g @angular/cli
 ```
 
-### 雛形を作成する
+angular-cli の auto-completion を利用できるようにする
+
+```bash
+ng completion --bash >> ~/.bash_profile
+source ~/.bash_profile
+```
+
+### 1-2. 雛形を作成する
 ベストプラクティスに基づいたディレクトリ構造でファイルを自動生成し、依存モジュールをインストールする。
 
 ```bash
-ng new todo-app
+ng new todo-app --routing
 ```
 
-### アプリをブラウザで表示
+### 1-3. アプリをブラウザで表示
 
 ```bash
 ng serve -o
@@ -44,7 +51,7 @@ ng serve の機能一覧を見る
 ng serve --help
 ```
 
-## アプリが表示されるまでに何が行われているの？
+## 2. アプリが表示されるまでに何が行われているの？
 1. `/index.html` を開く。ブラウザでアプリの JavaScript を実行し終えたら、`app-root` エレメントを `AppComponent` でトランスクルードする。
     - `AppComponent` の定義は `src/app/app.comonent.ts` に記述。
 
@@ -71,63 +78,180 @@ export class AppComponent {  // コントローラ。template に提供する値
 - この場合、`AppComponent` インスタンスの `title` プロパティの評価結果は `'app works!'`。
 - `{{title}}` は `app works!` に置換される。
 
-### ここで押さえて欲しいこと
-1. 値と処理を宣言するだけでいい。実行をフレームワークにお任せできるので、コーディング量が超絶的に少ない。
-2. スクリプトの値をテンプレートにバインディングをするときは、`{{ }}` 内に記述する。これによって、アプリの本質でない処理 (エレメントを取得して子要素を作って、text node に代入) でコードが埋め尽くされることが無い。値変更後の DOM 更新忘れと無縁。
-3. angular-cli の ng serve は Live Reload 機能を備えている。これまで、コード修正の度にトランスパイルしてブラウザリロードを手作業で行っていた人は、感動するべし。
-
-### バインディングを体験
+## 3. バインディングを体験
 template の `{{title}}` をいくつか書き替えてみよう。
 
-| `{{title}}` | 説明 |
+| angular expression | 説明 |
 | :--- | :--- |
 | `{{1 + 1}}` | evaluation 結果は 2 |
 | `{{ {} }}` | 評価結果がプリミティブ型じゃないとき。`{}.toString()` |
 | `{{foo}}` | undefined は空文字列に置換。`(undefined).toString()` エラーを心配しなくていい　|
 
-### Pipe (旧称Filter) で感動してみる
+## 1〜3　までのおさらい
+1. 値と処理を宣言するだけでいい。
+    - 実行をフレームワークにお任せできるので、コーディング量が超絶的に少ない。
+2. スクリプトの値をテンプレートにバインディングをするときは、`{{ }}` 内に記述する
+    - これによって、アプリの本質でない処理 (エレメントを取得して子要素を作って、text node に代入) でコードが埋め尽くされることが無い。
+    - 値変更後の DOM 更新忘れと無縁になる。
+3. angular-cli の ng serve は Live Reload 機能を備えている。
+    - これまで、コード修正の度にトランスパイルしてブラウザリロードを手作業で行っていた人は、感動モノ。
+
+## 4. ページを追加
+次の Step で Pipe の説明をするので、PipeComponent というコンポーネントを生成する。
+```bash
+ng g component pipe
+```
+
+リクエストパス `/pipe` と `PipeComponent` を紐付けるために、
+`app-routing.module.ts` にルーティング定義を追加。
+
+```typescript
+const routes: Routes = [
+  {
+    path: 'pipe',
+    component: PipeComponent
+  }
+];
+```
+
+http://localhost:4200/pipe にアクセス。
+
+## 5. Pipe (旧称Filter) で感動してみる
 センスの良さに、惚れるはず。
-template の `{{title}}` を更に次のように書いてみよう。
+`src/app/pipe/pipe.component.html` に次の Angular 式を書いてみよう。
 
-#### DecimalPipe
+### 5-1. DecimalPipe
 
-| template | result | memo |
+| angular expression | result | memo |
 | :--- | :--- | :--- |
-| `{{1000 | number}}` | `1,000` | `,` を入れて見やすくしてくれる。 |
-| `{{1 | number: '3.0-0'}}` | `001` | `{minIntegerDigits}.{minFractionDigits}-{maxFractionDigits}` |
-| `{{12.34 | number: '1.1-1'}}` | `12.3` | `{minIntegerDigits}.{minFractionDigits}-{maxFractionDigits}` |
+| <code>{{1000 &#124; number}}</code> | `1,000` | `,` を入れて見やすくしてくれる。 |
+| <code>{{1 &#124; number: '3.0-0'}}</code> | `001` | `{minIntegerDigits}.{minFractionDigits}-{maxFractionDigits}` |
+| <code>{{12.34 &#124; number: '1.1-1'}}</code> | `12.3` | `{minIntegerDigits}.{minFractionDigits}-{maxFractionDigits}` |
 
 https://angular.io/docs/ts/latest/api/common/index/DecimalPipe-pipe.html
 
-#### DatePipe
-まず、`AppComponent` にプロパティを追加。
+### 5-2. DatePipe
+`PipeComponent` にプロパティを追加。
 (template で `{{new Date()}}` という記載がエラーになるため)
 
+`src/app/pipe/pipe.component.ts` にバインディングする変数 `now` を追加
+
 ```typescript
-export class AppComponent {
-  title: string = 'app works!';
-  now  : Date   = new Date();
+export class PipeComponent implements OnInit {
+  now: Date = new Date();  // これを追記
+  constructor() { }
+
+  ngOnInit() {
+  }
+
 }
 ```
 
-| template | result | memo |
+`src/app/pipe/pipe.component.html` に次の Angular 式を書いてみよう。
+
+| angular expression | result | memo |
 | :--- | :--- | :--- |
-| `{{now}}` | `Sat Apr 29 2017 20:44:46 GMT+0900 (JST)` | `(new Date()).toString()` |
-| `{{now | date }}` | `Apr 29, 2017` | |
-| `{{now | date: 'y年M月d日 HH:mm'}}` | `2017年4月29日 20:57` | |
-| `{{now | date: 'MM/dd HH:mm'}}` | `04/29 21:00` | |
+| <code>{{now}}</code> | `Sat Apr 29 2017 20:44:46 GMT+0900 (JST)` | `(new Date()).toString()` |
+| <code>{{now &#124; date }}</code> | `Apr 29, 2017` | |
+| <code>{{now &#124; date: 'y年M月d日 HH:mm'}}</code> | `2017年4月29日 20:57` | |
+| <code>{{now &#124; date: 'MM/dd HH:mm'}}</code> | `04/29 21:00` | |
 
 https://angular.io/docs/ts/latest/api/common/index/DatePipe-pipe.html
 
-#### Pipe 一覧
+### 5-3. Pipe 一覧
 https://angular.io/docs/ts/latest/api/#!?query=pipe
 
-### 双方向バインディング
+## 6. 双方向バインディング
+これまでやってきたのは、Controller から Template への単方向バインディングだった。
+Template で発生したユーザのアクション (inputフォームへの文字入力) を Controller へ伝搬する例を解説する。
 
+まず、新しくページを追加する。
+
+```bash
+ng g component form
+```
+
+パス `/form` と結びつける。
+```typescript
+const routes: Routes = [
+  {
+    path: 'pipe',
+    component: PipeComponent
+  },
+  { // ここから下を追記する
+    path: 'form',
+    component: FormComponent
+  }
+];
+```
+
+ささっと form をマークアップ。
+```html
+<div>
+  <label>name: </label>
+  <input type="text" [(ngModel)]="task.name" (ngModelChange)="setUpdatedAt($event)" #name="ngModel" required minlength="2" maxlength="10">
+</div>
+<br>
+<h3>タスク</h3>
+<div>タスク名：{{task.name}}</div>
+<div>最終更新：{{task.updatedAt | date: 'MM/dd hh:mm:ss'}}</div>
+```
+
+コントローラにモデルクラスを定義。
+```typescript
+export class Task {
+  id: number;
+  name: string;
+  updatedAt: Date;
+}
+```
+
+モデルに適当な初期値を指定。
+```typescript
+export class FormComponent implements OnInit {
+  task: Task = {
+    id: 1,
+    name: '掃除',
+    updatedAt: new Date()
+  };
+  ...  
+}
+```
+
+validation error を表示する方法はいくつかあるが、一番簡単な方法はこれ。
+```html
+<div *ngIf="name.errors && (name.dirty || name.touched)">
+  <div [hidden]="!name.errors.required">
+    Name is required
+  </div>
+  <div [hidden]="!name.errors.minlength">
+    Name must be at least 2 characters long.
+  </div>
+  <div [hidden]="!name.errors.maxlength">
+    Name cannot be more than 10 characters long.
+  </div>
+</div>
+```
+※ `name.dirty` や `name.touched` にアクセスするためには、input に指定した `#name="ngModel"` が必要。
+
+## ワンタイムバインディング
+バインディングするために、Angular では値の変化をウォッチしている。監視対象が増えるほど、処理が遅くなる。
+値を変更しないものは、ワンタイムバインディングを使うようにし、性能劣化を抑えよう。
 
 ## 単体テスト
+```bash
+ng test
+```
 
 ## End to End テスト (E2E test)
+```bash
+ng e2e
+```
+
+## Production 環境用にビルド
+```bash
+ng build --target=production
+```
 
 ## Directive
 
