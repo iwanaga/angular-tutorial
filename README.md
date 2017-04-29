@@ -186,7 +186,53 @@ const routes: Routes = [
 ```
 
 ささっと form をマークアップ。
+```html
+<div>
+  <label>name: </label>
+  <input type="text" [(ngModel)]="task.name" (ngModelChange)="setUpdatedAt($event)" #name="ngModel" required minlength="2" maxlength="10">
+</div>
+<br>
+<h3>タスク</h3>
+<div>タスク名：{{task.name}}</div>
+<div>最終更新：{{task.updatedAt | date: 'MM/dd hh:mm:ss'}}</div>
+```
 
+コントローラにモデルクラスを定義。
+```typescript
+export class Task {
+  id: number;
+  name: string;
+  updatedAt: Date;
+}
+```
+
+モデルに適当な初期値を指定。
+```typescript
+export class FormComponent implements OnInit {
+  task: Task = {
+    id: 1,
+    name: '掃除',
+    updatedAt: new Date()
+  };
+  ...  
+}
+```
+
+validation error を表示する方法はいくつかあるが、一番簡単な方法はこれ。
+```html
+<div *ngIf="name.errors && (name.dirty || name.touched)">
+  <div [hidden]="!name.errors.required">
+    Name is required
+  </div>
+  <div [hidden]="!name.errors.minlength">
+    Name must be at least 2 characters long.
+  </div>
+  <div [hidden]="!name.errors.maxlength">
+    Name cannot be more than 10 characters long.
+  </div>
+</div>
+```
+※ `name.dirty` や `name.touched` にアクセスするためには、input に指定した `#name="ngModel"` が必要。
 
 ## ワンタイムバインディング
 バインディングするために、Angular では値の変化をウォッチしている。監視対象が増えるほど、処理が遅くなる。
