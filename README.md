@@ -161,10 +161,10 @@ export class PipeComponent implements OnInit {
 
 | template | result | memo |
 | :--- | :--- | :--- |
-| `{{now}}` | `Sat Apr 29 2017 20:44:46 GMT+0900 (JST)` | `(new Date()).toString()` |
-| `{{now &#124; date }}` | `Apr 29, 2017` | |
-| `{{now &#124; date: 'y年M月d日 HH:mm'}}` | `2017年4月29日 20:57` | |
-| `{{now &#124; date: 'MM/dd HH:mm'}}` | `04/29 21:00` | |
+| <code>{{now}}</code> | `Sat Apr 29 2017 20:44:46 GMT+0900 (JST)` | `(new Date()).toString()` |
+| <code>{{now &#124; date }}</code> | `Apr 29, 2017` | |
+| <code>{{now &#124; date: 'y年M月d日 HH:mm'}}</code> | `2017年4月29日 20:57` | |
+| <code>{{now &#124; date: 'MM/dd HH:mm'}}</code> | `04/29 21:00` | |
 
 https://angular.io/docs/ts/latest/api/common/index/DatePipe-pipe.html
 
