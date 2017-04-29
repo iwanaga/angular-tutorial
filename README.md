@@ -21,12 +21,33 @@ angular-cli をインストール
 npm install -g @angular/cli
 ```
 
+angular-cli の auto-completion を利用できるようにする
+
+```bash
+ng completion --bash >> ~/.bash_profile
+source ~/.bash_profile
+```
+
 ### 雛形を作成する
 ベストプラクティスに基づいたディレクトリ構造でファイルを自動生成し、依存モジュールをインストールする。
 
 ```bash
-ng new todo-app
+ng new todo-app --routing
 ```
+
+参考
+
+| 生成対象 | コマンド例 |
+| :--- | :--- |
+| Component | `ng g component my-new-component` |
+| Directive | `ng g directive my-new-directive` |
+| Pipe | `ng g pipe my-new-pipe` |
+| Service | `ng g service my-new-service` |
+| Class | `ng g class my-new-class` |
+| Guard | `ng g guard my-new-guard` |
+| Interface | `ng g interface my-new-interface` |
+| Enum | `ng g enum my-new-enum` |
+| Module | `ng g module my-module` |
 
 ### アプリをブラウザで表示
 
@@ -123,11 +144,33 @@ https://angular.io/docs/ts/latest/api/common/index/DatePipe-pipe.html
 https://angular.io/docs/ts/latest/api/#!?query=pipe
 
 ### 双方向バインディング
+これまでやってきたのは、Controller から Template への単方向バインディングだった。
+Template で発生したユーザのアクション (inputフォームへの文字入力) を Controller へ伝搬する例を解説する。
 
+まず、新しくページを追加する。
+
+```bash
+ng g component form-component
+```
+
+### ワンタイムバインディング
+バインディングするために、Angular では値の変化をウォッチしている。監視対象が増えるほど、処理が遅くなる。
+値を変更しないものは、ワンタイムバインディングを使うようにし、性能劣化を抑えよう。
 
 ## 単体テスト
+```bash
+ng test
+```
 
 ## End to End テスト (E2E test)
+```bash
+ng e2e
+```
+
+## Production 環境用にビルド
+```bash
+ng build --target=production
+```
 
 ## Directive
 
