@@ -1,3 +1,8 @@
-<p>
-  form works!
-</p>
+<div>
+  <label>name: </label>
+  <input [(ngModel)]="task.name" placeholder="name" (ngModelChange)="setUpdatedAt($event)">
+</div>
+<br>
+<h3>タスク</h3>
+<div>タスク名：{{task.name}}</div>
+<div>最終更新：{{task.updatedAt | date: 'MM/dd hh:mm:ss'}}</div>
