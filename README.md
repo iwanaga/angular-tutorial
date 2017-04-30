@@ -391,7 +391,22 @@ export class TaskService extends Resource {
 }
 ```
 
-Dependency Injection を使って、TaskService を利用できるようにする。
+[Dependency Injection](https://angular.io/docs/ts/latest/guide/dependency-injection.html) を使って、TaskService を利用できるようにする。
+
+Dependency Injection の存在意義は、
+1. Service や Factory の sub-dependency を気にする必要が無いこと
+2. 実体を Provider で抽象化しているので、単体テストをするとき、API リクエスト処理を Mock に置き換えるのが簡単にできる。
+
+Dependency Injection の方法は、Controller の constructor 引数に渡すだけ。
+下記の場合、`ServiceName` という Service を利用できるようにしている。Controller の中では、`this.accessor_name_to_service` で Service にアクセスする。
+
+```typescript
+constructor(private accessor_name_to_service: ServiceName) { }
+```
+TypeScript の constructor は、`super` を必ず call する。
+Component Class の constructor は、引数
+
+実際に TaskComponent を実装する。
 
 ```typescript
 import { Component, OnInit } from '@angular/core';
