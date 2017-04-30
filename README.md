@@ -334,6 +334,84 @@ export class DirectiveComponent implements OnInit {
 ## ここまでのまとめ
 - DOM 操作は必ず Directive で行う。そうしないと、Angular の長所が台無しになる。
 
+## 8. Service と Dependency Injection
+Ajax でサーバからデータを取得する処理は、複数の Controller で使いたい場合が多い。
+
+このような機能は Service と呼ばれる Singleton 生成機構で定義し、Dependency Injection 機構によって Component 内で利用できるようにする。 
+
+では、`/api/v1/tasks` リソースに GET, POST, PUT, DELETE する API クライアントを Service で実装してみよう。
+
+```bash
+ng generate service task
+```
+
+現状、3rd party module [ngx-resource](https://github.com/troyanskiy/ngx-resource) を利用するのが一番簡単。
+
+```bash
+cd angular-tutorial/todo-app/
+npm install ngx-resource --save
+```
+
+```bash
+ng generate component task
+```
+
+`app-routing.module.ts` にルーティングを追加。
+
+```typescript
+  {
+    path: 'task',
+    component: TaskComponent
+  }
+```
+
+Service を実装する。
+
+```typescript
+import { Injectable } from '@angular/core';
+import { RequestMethod } from '@angular/http';
+import { Resource, ResourceAction, ResourceParams } from 'ngx-resource';
+import { ResourceMethod } from 'ngx-resource/src/Interfaces';
+
+interface TaskQueryParams {
+  name?: string
+  dueDate?: Date
+}
+
+@Injectable()
+@ResourceParams({
+  url: '/api/v1/tasks'
+})
+export class TaskService extends Resource {
+  @ResourceAction({ path: '/', isArray: true })
+  index: ResourceMethod<TaskQueryParams, any>;
+
+  @ResourceAction({ path: '/{!id}' })
+  show: ResourceMethod<{id: number}, any>
+}
+```
+
+Dependency Injection を使って、TaskService を利用できるようにする。
+
+```typescript
+import { Component, OnInit } from '@angular/core';
+import {TaskService} from "../task.service";
+
+@Component({
+  selector: 'app-task',
+  templateUrl: './task.component.html',
+  styleUrls: ['./task.component.css']
+})
+export class TaskComponent implements OnInit {
+  tasks = [];
+  constructor(private taskService: TaskService) { }
+
+  ngOnInit() {
+    this.tasks = this.taskService.index();
+  }
+}
+```
+
 ## 単体テスト
 ```bash
 ng test
@@ -348,8 +426,6 @@ ng e2e
 ```bash
 ng build --target=production
 ```
-
-## Service と Dependency Injection
 
 ## Angular Component の凄まじい生産性
 - angular-material
