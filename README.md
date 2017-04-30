@@ -1,6 +1,11 @@
 # angular-tutorial
 tutorial for angular with angular-cli
 
+## 0. なぜ Angular か？
+1. テストの容易さ、拡張性の高さがズバ抜けて素晴らしいから
+2. Directive を使うことで、必要な UI パーツを短時間で実装できるから。
+3. Single Page Application を実装するための機能を Full stack で備えているから。不足している機能に悩むことが無い。
+
 ## 1. セットアップ
 ### 1-1. angular-cli
 Node.js v6.10.2 をインストール
@@ -427,23 +432,25 @@ export class TaskComponent implements OnInit {
 }
 ```
 
-## 単体テスト
+## 9. 単体テスト
 ```bash
 ng test
 ```
 
-## End to End テスト (E2E test)
+## 10. End to End テスト (E2E test)
 ```bash
 ng e2e
 ```
 
-## Production 環境用にビルド
+## 11. Production 環境用にビルド
 ```bash
 ng build --target=production
 ```
 
-## Angular Component の凄まじい生産性
-- angular-material
+## 12. Angular Component の凄まじい生産性
+- [angular-material](https://material.angular.io/components)
+    - これを使うと、`<md-input-container><input></md-input-container>` みたいなマークアップだけでアニメーション付きのオサレな入力フォームが作れる。
+    - 生産性が高すぎるので、ハッカソン御用達。
 
-## 参考情報
+## 13. 参考情報
 - [Template Syntax](https://angular.io/docs/ts/latest/guide/template-syntax.html)
