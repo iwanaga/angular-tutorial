@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { PipeComponent } from './pipe/pipe.component';
 import { FormComponent } from './form/form.component';
 import { DirectiveComponent } from  './directive/directive.component';
+import { TaskComponent } from "./task/task.component";
 
 const routes: Routes = [
   {
@@ -16,6 +17,10 @@ const routes: Routes = [
   {
     path: 'directive',
     component: DirectiveComponent
+  },
+  {
+    path: 'task',
+    component: TaskComponent
   }
 ];
 

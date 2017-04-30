@@ -1,9 +1,16 @@
 # angular-tutorial
 tutorial for angular with angular-cli
 
+## 0. なぜ Angular か？
+1. テストの容易さ、拡張性の高さがズバ抜けて素晴らしいから
+2. Directive を使うことで、必要な UI パーツを短時間で実装できるから。
+3. Single Page Application を実装するための機能を Full stack で備えているから。不足している機能に悩むことが無い。
+
 ## 1. セットアップ
 ### 1-1. angular-cli
-Node.js v6.10.2 をインストール
+nvm を使って Node.js v6.10.2 をインストール
+
+nvm を入れてない人は、[この手順](https://github.com/creationix/nvm#install-script) でインストール。
 
 ```bash
 nvm install 6.10.2
@@ -334,25 +341,118 @@ export class DirectiveComponent implements OnInit {
 ## ここまでのまとめ
 - DOM 操作は必ず Directive で行う。そうしないと、Angular の長所が台無しになる。
 
-## 単体テスト
+## 8. Service と Dependency Injection
+Ajax でサーバからデータを取得する処理は、複数の Controller で使いたい場合が多い。
+
+このような機能は Service と呼ばれる Singleton 生成機構で定義し、Dependency Injection 機構によって Component 内で利用できるようにする。 
+
+では、`/api/v1/tasks` リソースに GET, POST, PUT, DELETE する API クライアントを Service で実装してみよう。
+
+```bash
+ng generate service task
+```
+
+現状、3rd party module [ngx-resource](https://github.com/troyanskiy/ngx-resource) を利用するのが一番簡単。
+
+```bash
+cd angular-tutorial/todo-app/
+npm install ngx-resource --save
+```
+
+```bash
+ng generate component task
+```
+
+`app-routing.module.ts` にルーティングを追加。
+
+```typescript
+  {
+    path: 'task',
+    component: TaskComponent
+  }
+```
+
+Service を実装する。
+
+```typescript
+import { Injectable } from '@angular/core';
+import { RequestMethod } from '@angular/http';
+import { Resource, ResourceAction, ResourceParams } from 'ngx-resource';
+import { ResourceMethod } from 'ngx-resource/src/Interfaces';
+
+interface TaskQueryParams {
+  name?: string
+  dueDate?: Date
+}
+
+@Injectable()
+@ResourceParams({
+  url: '/api/v1/tasks'
+})
+export class TaskService extends Resource {
+  @ResourceAction({ path: '/', isArray: true })
+  index: ResourceMethod<TaskQueryParams, any>;
+
+  @ResourceAction({ path: '/{!id}' })
+  show: ResourceMethod<{id: number}, any>
+}
+```
+
+[Dependency Injection](https://angular.io/docs/ts/latest/guide/dependency-injection.html) を使って、TaskService を利用できるようにする。
+
+Dependency Injection の存在意義は、
+1. Service や Factory の sub-dependency を気にする必要が無いこと
+2. 実体を Provider で抽象化しているので、単体テストをするとき、API リクエスト処理を Mock に置き換えるのが簡単にできる。
+
+Dependency Injection の方法は、Controller の constructor 引数に渡すだけ。
+下記の場合、`ServiceName` という Service を利用できるようにしている。Controller の中では、`this.accessor_name_to_service` で Service にアクセスする。
+
+```typescript
+constructor(private accessor_name_to_service: ServiceName) { }
+```
+TypeScript の constructor は、`super` を必ず call する。
+Component Class の constructor は、引数
+
+実際に TaskComponent を実装する。
+
+```typescript
+import { Component, OnInit } from '@angular/core';
+import {TaskService} from "../task.service";
+
+@Component({
+  selector: 'app-task',
+  templateUrl: './task.component.html',
+  styleUrls: ['./task.component.css']
+})
+export class TaskComponent implements OnInit {
+  tasks = [];
+  constructor(private taskService: TaskService) { }
+
+  ngOnInit() {
+    this.tasks = this.taskService.index();
+  }
+}
+```
+
+## 9. 単体テスト
 ```bash
 ng test
 ```
 
-## End to End テスト (E2E test)
+## 10. End to End テスト (E2E test)
 ```bash
 ng e2e
 ```
 
-## Production 環境用にビルド
+## 11. Production 環境用にビルド
 ```bash
 ng build --target=production
 ```
 
-## Service と Dependency Injection
+## 12. Angular Component の凄まじい生産性
+- [angular-material](https://material.angular.io/components)
+    - これを使うと、`<md-input-container><input></md-input-container>` みたいなマークアップだけでアニメーション付きのオサレな入力フォームが作れる。
+    - 生産性が高すぎるので、ハッカソン御用達。
 
-## Angular Component の凄まじい生産性
-- angular-material
-
-## 参考情報
+## 13. 参考情報
 - [Template Syntax](https://angular.io/docs/ts/latest/guide/template-syntax.html)
