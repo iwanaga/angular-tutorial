@@ -240,7 +240,8 @@ validation error を表示する方法はいくつかあるが、一番簡単な
 
 ## 7. Directive
 Angular の核となる哲学は、「処理」と「DOM」の分離である。
-もし Controller で DOM を操作すれば、「DOMを取得し、要素を追加し、Text Nodeを修正」のような旧来のコードが再び現れることになり、Angular の長所を台無しにしてしまう。
+
+もし Controller 内で DOM を操作しようとすれば、「DOMを取得し、要素を追加し、Text Nodeを修正」のような旧来のコードが再び現れることになり、Angular の長所を台無しにしてしまう。
 
 では、DOM を操作するときはどうするべきか？そこで登場するのが Structural Directive である。
 Structural Directive は HTML のレイアウトをするために存在すると理解してよい。
