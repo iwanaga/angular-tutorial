@@ -1,0 +1,14 @@
+<h3>Directive Examples</h3>
+<h4>*ngFor</h4>
+<ul>
+  <li *ngFor="let task of taskList">
+    <span>{{task.name}}</span> <span>{{task.dueDate | date: 'MM/dd hh:mm'}}</span>
+  </li>
+</ul>
+
+<h4>*ngIf</h4>
+<div>isActivated: {{isActivated}}</div>
+<button (click)="switchActivationState()">isActivatedの値を反転する</button>
+<br><br>
+<div *ngIf="isActivated">Activated</div>
+<div *ngIf="!isActivated">Not Activated</div>

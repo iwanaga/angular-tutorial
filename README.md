@@ -238,6 +238,105 @@ validation error を表示する方法はいくつかあるが、一番簡単な
 バインディングするために、Angular では値の変化をウォッチしている。監視対象が増えるほど、処理が遅くなる。
 値を変更しないものは、ワンタイムバインディングを使うようにし、性能劣化を抑えよう。
 
+## 7. Directive
+Angular の核となる哲学は、「処理」と「DOM」の分離である。
+
+もし Controller 内で DOM を操作しようとすれば、「DOMを取得し、要素を追加し、Text Nodeを修正」のような旧来のコードが再び現れることになり、Angular の長所を台無しにしてしまう。
+
+では、DOM を操作するときはどうするべきか？そこで登場するのが Structural Directive である。
+Structural Directive は HTML のレイアウトをするために存在すると理解してよい。
+
+Structural Directive の使い方を習得するために、まずは新しくページを追加する。
+
+```bash
+ng g component directive
+```
+
+`app-routing.module.ts` にルーティング定義を追記。
+```typescript
+const routes: Routes = [
+  {
+    path: 'pipe',
+    component: PipeComponent
+  },
+  {
+    path: 'form',
+    component: FormComponent
+  },
+  {
+    path: 'directive',
+    component: DirectiveComponent
+  }
+];
+```
+
+### 7-1. *ngFor
+テーブルやリスト作成では、Array を enumerate して要素を生成する場合が多い。
+*ngFor は、この繰り返し DOM 生成を行うための directive である。
+
+`directive.component.ts` にリストの元となるデータを定義する。
+通常は Ajax でサーバから取得するデータだが、今回は簡単のため Controller 内にハードコードする。
+
+```typescript
+export class DirectiveComponent implements OnInit {
+  taskList = [
+    { id: 1, name: '掃除',    dueDate: new Date() },
+    { id: 2, name: '洗濯',    dueDate: new Date() },
+    { id: 3, name: 'ゴミ捨て', dueDate: new Date() },
+    { id: 4, name: '資料作り', dueDate: new Date() },
+    { id: 5, name: '執筆',    dueDate: new Date() }
+  ];
+  ...
+}
+```
+
+`directive.component.html` で `*ngFor` を使ってマークアップする。
+
+```html
+<h3>Directive Examples</h3>
+<h4>*ngFor</h4>
+<ul>
+  <li *ngFor="let task of taskList">
+    <span>{{task.name}}</span> <span style="color: #999">{{task.dueDate | date: 'MM/dd hh:mm'}}</span>
+  </li>
+</ul>
+```
+
+### 7-2. *ngIf
+- 書式
+    - `<div *nfIf="angular-expression"></div>`
+- 機能
+    - angular-expression が true であれば、DOM を生成する。
+    - angular-expression が false であれば、子要素も含めて DOM を生成しない。
+- ユースケース
+    - form validation 結果に応じたエラーメッセージの文字表示／非表示
+
+```typescript
+export class DirectiveComponent implements OnInit {
+  ...
+  isActivated = true;
+  ...
+  switchActivationState() {
+    this.isActivated = !this.isActivated;
+  }
+}
+```
+
+```html
+<h4>*ngIf</h4>
+<div>isActivated: {{isActivated}}</div>
+<button (click)="switchActivationState()">isActivatedの値を反転する</button>
+<br><br>
+<div *ngIf="isActivated">Activated</div>
+<div *ngIf="!isActivated">Not Activated</div>
+```
+
+メモ：`<button (click)="switchActivationState()"></button>` でしている attribute は [Event Binding Directive](https://angular.io/docs/ts/latest/guide/template-syntax.html#!#event-binding) と呼び、
+書式は `(eventname)="eventHandler($event)"` である。
+
+## ここまでのまとめ
+- DOM 操作は必ず Directive で行う。そうしないと、Angular の長所が台無しになる。
+
 ## 単体テスト
 ```bash
 ng test
@@ -253,9 +352,10 @@ ng e2e
 ng build --target=production
 ```
 
-## Directive
-
 ## Service と Dependency Injection
 
 ## Angular Component の凄まじい生産性
 - angular-material
+
+## 参考情報
+- [Template Syntax](https://angular.io/docs/ts/latest/guide/template-syntax.html)
