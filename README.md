@@ -8,7 +8,9 @@ tutorial for angular with angular-cli
 
 ## 1. セットアップ
 ### 1-1. angular-cli
-Node.js v6.10.2 をインストール
+nvm を使って Node.js v6.10.2 をインストール
+
+nvm を入れてない人は、[この手順](https://github.com/creationix/nvm#install-script) でインストール。
 
 ```bash
 nvm install 6.10.2
