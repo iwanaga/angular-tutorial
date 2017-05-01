@@ -221,7 +221,13 @@ export class FormComponent implements OnInit {
     name: '掃除',
     updatedAt: new Date()
   };
-  ...  
+  constructor() { }
+
+  ngOnInit() {
+  }
+  setUpdatedAt() {
+    this.task.updatedAt = new Date();
+  }
 }
 ```
 
