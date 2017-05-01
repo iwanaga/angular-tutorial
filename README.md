@@ -225,7 +225,7 @@ export class FormComponent implements OnInit {
 
   ngOnInit() {
   }
-  setUpdatedAt() {
+  setUpdatedAt(ev) {
     this.task.updatedAt = new Date();
   }
 }
@@ -404,10 +404,20 @@ export class TaskService extends Resource {
 }
 ```
 
+Angular で利用できようにする。
+
+`app.module.ts` の Provider に登録。
+```typescript
+import { TaskService } from './task.service';
+  ...
+  providers: [TaskService],
+  ...
+```
+
 [Dependency Injection](https://angular.io/docs/ts/latest/guide/dependency-injection.html) を使って、TaskService を利用できるようにする。
 
-Dependency Injection の存在意義は、
-1. Service や Factory の sub-dependency を気にする必要が無いこと
+Dependency Injection の存在意義は、Controller 実装時に、「依存モジュールを列挙するだけ」にすること。
+1. Service や Factory の sub-dependency やコンストラクタ引数などを気にする必要が無いこと
 2. 実体を Provider で抽象化しているので、単体テストをするとき、API リクエスト処理を Mock に置き換えるのが簡単にできる。
 
 Dependency Injection の方法は、Controller の constructor 引数に渡すだけ。

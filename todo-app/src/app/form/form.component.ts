@@ -16,7 +16,7 @@ export class FormComponent implements OnInit {
   ngOnInit() {
   }
 
-  setUpdatedAt() {
+  setUpdatedAt(ev) {
     this.task.updatedAt = new Date();
   }
 
