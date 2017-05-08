@@ -472,3 +472,22 @@ ng build --target=production
 
 ## 13. 参考情報
 - [Template Syntax](https://angular.io/docs/ts/latest/guide/template-syntax.html)
+
+## 14. 開発中に API サーバへのリクエストはそのまま利用できるようにしたい
+ng serve コマンドのオプションを使って、API リクエストのみをサーバにプロキシすればいい！
+```
+ng serve -o --proxy-config proxy.conf.json
+```
+
+proxy.conf.json は下記のように書く。公式情報は[こちら](https://github.com/angular/angular-cli/blob/master/docs/documentation/stories/proxy.md)
+```
+{
+  "/api": {
+    "target": "http://localhost:3000",
+    "secure": false
+  }
+}
+```
+
+
+
